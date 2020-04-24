@@ -17,4 +17,6 @@ Traffic Data Sources
   2. https://data.austintexas.gov/Transportation-and-Mobility/Traffic-Studies-Vehicle-Classification-Reports/2hke-by7g
   3. https://data.sandiego.gov/datasets/traffic-volumes/
   
-  
+Employment Data Sources  
+  1. https://www.bls.gov/
+  BLS.gov cannot vouch for the data or analyses derived from these data after the data have been retrieved from BLS.gov.
