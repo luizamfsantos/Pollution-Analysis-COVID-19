@@ -17,26 +17,6 @@ if(!require(leaflet)) install.packages("leaflet")
 if(!require(plotly)) install.packages("plotly")
 if(!require(geojsonio)) install.packages("geojsonio")
 
-# Import Data
-
-# San Diego Traffic Data
-sd_traffic_count <- read.csv("/Users/leidyward/Desktop/CS/R/EarthX/data/traffic/san_diego_traffic_counts.csv")
-# create column for year in traffic data by splitting date_count attribute
-y <- str_split(as.character(sd_traffic_count$date_count),'/', simplify = TRUE) 
-y <- substr(y[,3], 1, 2)
-sd_traffic_count$year <- y
-y_normal_format <- str_split(as.character(sd_traffic_count$date_count),' ', simplify = TRUE) 
-sd_traffic_count$date_count <- y_normal_format[,1]
-
-# sum traffic count by year
-tc_aggregated <- aggregate(sd_traffic_count$total_count, by = list(Category = sd_traffic_count$date_count), FUN = sum)
-y_agg <- str_split(as.character(tc_aggregated$Category),'/', simplify = TRUE) 
-y_agg <- substr(y_agg[,3], 1, 2)
-tc_aggregated$year <- y_agg
-y_normal_format_agg <- str_split(as.character(tc_aggregated$Category),' ', simplify = TRUE) 
-tc_aggregated$Category <- y_normal_format_agg[,1]
-names(tc_aggregated) <- c("date", "count", "year")
-
 
 library(shiny)
 library(shinyWidgets)
@@ -52,23 +32,94 @@ library(plotly)
 library(ggiraph)
 library(maps)
 
-#### Plotting functions for traffic count ####
-# function to plot traffic count by year (April of 2018, 2019, 2020)
+
+# Import Data
+
+# San Diego Traffic Volume Data
+sd_traffic_count <- read.csv("/Users/leidyward/Desktop/CS/R/EarthX/data/traffic/san_diego_traffic_counts.csv")
+# create column for year in traffic data by splitting date_count attribute
+y <- str_split(as.character(sd_traffic_count$date_count),'/', simplify = TRUE) 
+y <- substr(y[,3], 1, 2)
+sd_traffic_count$year <- y
+date_normal_format <- str_split(as.character(sd_traffic_count$date_count),' ', simplify = TRUE) 
+sd_traffic_count$date_count <- date_normal_format[,1]
+
+# San Diego Traffic Collision Data
+sd_traffic_collision <- read.csv("data/traffic/collisions_data_san_diego.csv")
+# create column for year in traffic data by splitting date_count attribute
+y <- str_split(as.character(sd_traffic_collision$date_time),'/', simplify = TRUE) 
+y <- substr(y[,3], 1, 2)
+sd_traffic_collision$year <- y
+date_normal_format <- str_split(as.character(sd_traffic_collision$date_time),' ', simplify = TRUE) 
+sd_traffic_collision$date_time <- date_normal_format[,1]
+sd_traffic_collision$num <- 1
+
+# sum traffic count by year
+tc_aggregated <- aggregate(sd_traffic_count$total_count, by = list(Category = sd_traffic_count$date_count), FUN = sum)
+y_agg <- str_split(as.character(tc_aggregated$Category),'/', simplify = TRUE) 
+y_agg <- substr(y_agg[,3], 1, 2)
+tc_aggregated$year <- y_agg
+y_normal_format_agg <- str_split(as.character(tc_aggregated$Category),' ', simplify = TRUE) 
+tc_aggregated$Category <- y_normal_format_agg[,1]
+names(tc_aggregated) <- c("date", "count", "year")
+
+tc_year_agg <- aggregate(tc_aggregated$count, by = list(Category = tc_aggregated$year), FUN = sum)
+names(tc_year_agg) <- c("year", "count")
+tc_year_agg <- tc_year_agg[-1,]
+tc_aggregated <- tc_aggregated[order(as.Date(tc_aggregated$date, format = "%m/%d/%y")),]
+tc_aggregated$date <- as.Date(tc_aggregated$date, format = "%m/%d/%y") 
+
+# sum traffic collisions by year
+tcol_aggregated <- aggregate(sd_traffic_collision$num, by = list(Category = sd_traffic_collision$date_time), FUN = sum)
+y_agg <- str_split(as.character(tcol_aggregated$Category),'/', simplify = TRUE) 
+y_agg <- substr(y_agg[,3], 1, 2)
+tcol_aggregated$year <- y_agg
+date_normal_format_agg <- str_split(as.character(tcol_aggregated$Category),' ', simplify = TRUE) 
+tcol_aggregated$Category <- date_normal_format_agg[,1]
+names(tcol_aggregated) <- c("date", "collisions", "year")
 
 
-# function to plot all traffic counts (April 2018 - 2020)
-# TODO: present graph better, add graph for traffic incidents?
+#### Plotting functions for traffic count and collisions ####
+
+
+# function to plot traffic counts (April 2018 - 2020)
+# TODO: present graphs better
 all_tc_plot = function(tc_aggregated, yr) {
   plot_df = subset(tc_aggregated, year<=yr)
-  g1 <- ggplot(plot_df, aes(x = date, y = count)) + geom_line() + 
-    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point()
+  year18 <- subset(tc_aggregated, year == "18")
+  year19 <- subset(tc_aggregated, year == "19")
+  year20 <- subset(tc_aggregated, year == "20")
   
-  if(yr == "18") { g1 <- ggplot(data = subset(plot_df, year == "18"), aes(x = date, y = count)) + geom_line() + 
-    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point() }
-  if(yr == "19") { g1 <- ggplot(data = subset(plot_df, year == "19"), aes(x = date, y = count)) + geom_line() + 
-    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point()}
-  if(yr == "20") { g1 <- ggplot(data = subset(plot_df, year == "20"), aes(x = date, y = count)) + geom_line() + 
-    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point()}
+  #g1 <- ggplot(tc_year_agg, aes(x = year, y = count)) + geom_bar(stat = "identity") + xlab("April of Year") + theme_bw() + theme(legend.position = "")
+  g1 <- ggplot(data = tc_aggregated) + 
+    geom_line(data = year18, aes(x = date, y = count, group = 1)) + 
+    geom_line(data = year19, aes(x = date, y = count, group = 1)) +
+    geom_line(data = year20, aes(x = date, y = count, group = 1)) + 
+    scale_x_date(date_labels = "%m/%y")
+  
+  if(yr == "18") { g1 <- ggplot(data = year18, aes(x = date, y = count)) + geom_line(aes(group = 1)) + 
+    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point(size = 1) }
+  if(yr == "19") { g1 <- ggplot(data = year19, aes(x = date, y = count)) + geom_line(aes(group = 1)) + 
+    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point(size = 1) + ylim(0, 250000) }
+  if(yr == "20") { g1 <- ggplot(data = year20, aes(x = date, y = count)) + geom_line(aes(group = 1)) + 
+    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point(size = 1) + ylim(0, 200000) }
+  #if(yr == "all") { g1 <- ggplot(data = subset(plot_df, year == "20"), aes(x = date, y = count)) + geom_line(aes(group = 1)) + 
+   # ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point(size = 1) }
+  g1
+}
+
+
+tcol_plot = function(tcol_aggregated, yr) {
+  plot_df = subset(tcol_aggregated, year<=yr)
+  g1 <- ggplot(plot_df, aes(x = date, y = collisions)) + geom_line(aes(group = 1)) + 
+    ylab("collision count") + theme_bw() + theme(legend.position = "") + geom_point(size = 1) + ylim(0, 40)
+  
+  if(yr == "18") { g1 <- ggplot(data = subset(plot_df, year == "18"), aes(x = date, y = collisions)) + geom_line(aes(group = 1)) + 
+    ylab("collision count") + theme_bw() + theme(legend.position = "") + geom_point(size = 1) + ylim(0, 40) }
+  if(yr == "19") { g1 <- ggplot(data = subset(plot_df, year == "19"), aes(x = date, y = collisions)) + geom_line(aes(group = 1)) + 
+    ylab("collision count") + theme_bw() + theme(legend.position = "") + geom_point(size = 1) + ylim(0, 40) }
+  if(yr == "20") { g1 <- ggplot(data = subset(plot_df, year == "20"), aes(x = date, y = collisions)) + geom_line(aes(group = 1)) + 
+    ylab("collision count") + theme_bw() + theme(legend.position = "") + geom_point(size = 1) + ylim(0, 40) }
   g1
 }
 
@@ -119,13 +170,12 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
                               radioButtons("plot_year", "Date Range: ",
                                           c("January 2020" = "20", "April 2019" = "19", 
                                             "April 2018" = "18", "All" = "all")),
-                                          #selected = c("January 2020"),
-                              "Select date."
+                              "San Diego Data"
                             ),
                             mainPanel(
                               tabsetPanel(
                                 tabPanel("Traffic Volume", plotlyOutput("all_tc_plot"), width = 6),
-                                tabPanel("Traffic Incident"),
+                                tabPanel("Traffic Collision", plotlyOutput("tcol_plot", width = 800)),
                                 tabPanel("Combined")
                               )
                             )
@@ -170,9 +220,14 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
 # Server logic
 server <- function(input, output, session) {
   
-  # traffic plots
+  # traffic count plots
   output$all_tc_plot <- renderPlotly({
     all_tc_plot(tc_aggregated, input$plot_year)
+  })
+  
+  # traffic collisions plots
+  output$tcol_plot <- renderPlotly({
+    tcol_plot(tcol_aggregated, input$plot_year)
   })
 }
 
