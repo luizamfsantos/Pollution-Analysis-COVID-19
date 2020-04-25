@@ -36,7 +36,7 @@ library(maps)
 # Import Data
 
 # San Diego Traffic Volume Data
-sd_traffic_count <- read.csv("/Users/leidyward/Desktop/CS/R/EarthX/data/traffic/san_diego_traffic_counts.csv")
+sd_traffic_count <- read.csv("data/traffic/san_diego_traffic_counts.csv")
 # create column for year in traffic data by splitting date_count attribute
 y <- str_split(as.character(sd_traffic_count$date_count),'/', simplify = TRUE) 
 y <- substr(y[,3], 1, 2)
