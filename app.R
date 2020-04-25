@@ -16,7 +16,7 @@ if(!require(RColorBrewer)) install.packages("RColorBrewer")
 if(!require(leaflet)) install.packages("leaflet")
 if(!require(plotly)) install.packages("plotly")
 if(!require(geojsonio)) install.packages("geojsonio")
-
+if(!require(stringr)) install.packages("stringr")
 
 library(shiny)
 library(shinyWidgets)
@@ -31,6 +31,7 @@ library(geojsonio)
 library(plotly)
 library(ggiraph)
 library(maps)
+library(stringr)
 
 
 # Import Data
