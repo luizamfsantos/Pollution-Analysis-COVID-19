@@ -124,6 +124,16 @@ tcol_plot = function(tcol_aggregated, yr) {
   g1
 }
 
+
+# import air quality data
+
+
+# table with Air Quality Index Explanations from https://www.epa.gov/outdoor-air-quality-data/air-data-basic-information
+ranges <- c('0-50', '51-100', '101-150', '151-200', '201-300','301-500')
+health_concern <- c('Good', 'Moderate', 'Unhealthy for Sensitive Groups', 
+'Unhealthy', 'Very Unhealthy', 'Hazardous')
+colors <- c('green', 'yellow', 'orange', 'red', 'purple', 'maroon')
+infoAQI <- data.frame(ranges,health_concern,colors) 
 ##############################################
 
 # Define UI for webpage
@@ -195,7 +205,9 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
                               textOutput("Notes.")
                             ),
                             
-                            mainPanel(width = 6)
+                            mainPanel(
+                              tableOutput('AQIinfo')
+                            )
                           )      
                  ),
                  
@@ -230,6 +242,9 @@ server <- function(input, output, session) {
   output$tcol_plot <- renderPlotly({
     tcol_plot(tcol_aggregated, input$plot_year)
   })
+  
+  #air quality plots
+  output$AQIinfo <- renderTable(infoAQI)
 }
 
 shinyApp(ui, server)
