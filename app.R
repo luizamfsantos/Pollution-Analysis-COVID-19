@@ -1,5 +1,5 @@
 # EarthXHack 2020
-# Leidy Buescher, Luiza Santos 
+# Contributors: Leidy Buescher, Luiza Santos 
 
 
 # load needed packages
@@ -17,7 +17,25 @@ if(!require(leaflet)) install.packages("leaflet")
 if(!require(plotly)) install.packages("plotly")
 if(!require(geojsonio)) install.packages("geojsonio")
 
-# import data
+# Import Data
+
+# San Diego Traffic Data
+sd_traffic_count <- read.csv("/Users/leidyward/Desktop/CS/R/EarthX/data/traffic/san_diego_traffic_counts.csv")
+# create column for year in traffic data by splitting date_count attribute
+y <- str_split(as.character(sd_traffic_count$date_count),'/', simplify = TRUE) 
+y <- substr(y[,3], 1, 2)
+sd_traffic_count$year <- y
+y_normal_format <- str_split(as.character(sd_traffic_count$date_count),' ', simplify = TRUE) 
+sd_traffic_count$date_count <- y_normal_format[,1]
+
+# sum traffic count by year
+tc_aggregated <- aggregate(sd_traffic_count$total_count, by = list(Category = sd_traffic_count$date_count), FUN = sum)
+y_agg <- str_split(as.character(tc_aggregated$Category),'/', simplify = TRUE) 
+y_agg <- substr(y_agg[,3], 1, 2)
+tc_aggregated$year <- y_agg
+y_normal_format_agg <- str_split(as.character(tc_aggregated$Category),' ', simplify = TRUE) 
+tc_aggregated$Category <- y_normal_format_agg[,1]
+names(tc_aggregated) <- c("date", "count", "year")
 
 
 library(shiny)
@@ -33,6 +51,28 @@ library(geojsonio)
 library(plotly)
 library(ggiraph)
 library(maps)
+
+#### Plotting functions for traffic count ####
+# function to plot traffic count by year (April of 2018, 2019, 2020)
+
+
+# function to plot all traffic counts (April 2018 - 2020)
+# TODO: present graph better, add graph for traffic incidents?
+all_tc_plot = function(tc_aggregated, yr) {
+  plot_df = subset(tc_aggregated, year<=yr)
+  g1 <- ggplot(plot_df, aes(x = date, y = count)) + geom_line() + 
+    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point()
+  
+  if(yr == "18") { g1 <- ggplot(data = subset(plot_df, year == "18"), aes(x = date, y = count)) + geom_line() + 
+    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point() }
+  if(yr == "19") { g1 <- ggplot(data = subset(plot_df, year == "19"), aes(x = date, y = count)) + geom_line() + 
+    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point()}
+  if(yr == "20") { g1 <- ggplot(data = subset(plot_df, year == "20"), aes(x = date, y = count)) + geom_line() + 
+    ylab("traffic count") + theme_bw() + theme(legend.position = "") + geom_point()}
+  g1
+}
+
+##############################################
 
 # Define UI for webpage
 ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE, 
@@ -76,15 +116,16 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
                           
                           sidebarLayout(
                             sidebarPanel(
-                              pickerInput("date_selected", "Date Range: ",
-                                          choices = c("April 2020", "March 2020", "Both"),
-                                          multiple = FALSE),
+                              radioButtons("plot_year", "Date Range: ",
+                                          c("January 2020" = "20", "April 2019" = "19", 
+                                            "April 2018" = "18", "All" = "all")),
+                                          #selected = c("January 2020"),
                               "Select date."
                             ),
                             mainPanel(
                               tabsetPanel(
-                                tabPanel("2020 Data"),
-                                tabPanel("2019 Data"),
+                                tabPanel("Traffic Volume", plotlyOutput("all_tc_plot"), width = 6),
+                                tabPanel("Traffic Incident"),
                                 tabPanel("Combined")
                               )
                             )
@@ -109,7 +150,8 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
                  
                  # Gardening Tab
                  tabPanel("Plants",
-                          "hardiness zones. planting suggestions. go outside, better the environment, etc."),
+                          "hardiness zones. planting suggestions. go outside, better the environment, etc."
+                          ),
                  
                  # Our Goals Tab
                  tabPanel("Goal",
@@ -128,6 +170,10 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
 # Server logic
 server <- function(input, output, session) {
   
+  # traffic plots
+  output$all_tc_plot <- renderPlotly({
+    all_tc_plot(tc_aggregated, input$plot_year)
+  })
 }
 
 shinyApp(ui, server)
