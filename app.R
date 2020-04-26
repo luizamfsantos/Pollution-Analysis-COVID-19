@@ -519,8 +519,7 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                                     ),
                                     box(
                                       title = "Why does this matter?", width = NULL, solidHeader = TRUE, status = "primary",
-                                      "If remote work was more feasible, and people no longer had their commute, the impact this has 
-                                      on air quality is a positive one."
+                                      "If remote work was more feasible, and people no longer had to commute, pollution levels could stay at low levels and we would remove some of our carbon foot print."
                                     ),
                                     box(
                                       width = NULL, background = "light-blue",
@@ -534,15 +533,18 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                              column(width = 4,
                                     box(
                                       status = "warning", width = NULL,
-                                      "Describe air quality index"
+                                      "Air Quality Index is an index from 0 to 500, where 0 means low health risk and 500 means you should probably get an air tank. 
+                                      Even though other things besides pollution affects it, this is a good measure of how much pollution there is in the air. "
                                     ),
                                     box(
                                       title = "Data Results", width = NULL, solidHeader = TRUE, status = "primary",
-                                      "graph results"
+                                      "The data clearly shows that in cities like San Diego, the pollution levels have decreased since the shelther-in-place order. However, in places like Austin, it does not seem to have much change."
                                     ),
                                     box(
                                       title = "What should we do next?", width = NULL,
-                                      "future plans"
+                                      "Some future plans are to add more cities to get a better picture. We were able to write a script that can draw the data for air quality and employment data from multiple cities but due to time constraints we were not able to implement it.
+                                      We planned to make a Machine Learning model to determine which sector caused the most decrease in pollution and intersect with jobs that can be turned remote. 
+                                      This information can be beneficial for companies and governments in an attempt to be take better care of our environment. "
                                     )
                              ),
                              
