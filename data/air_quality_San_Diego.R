@@ -5,7 +5,7 @@ lapply(my_packages,library,character.only = TRUE)
 # import data
 san_diego_data_aqi_2019 <- read_csv('data/air_quality/san_diego_2019_aqi.csv',
                                     col_types = cols(
-                                      'date_local' = col_date(format='%m/%d/%Y'),
+                                      'date_local' = col_date(format='%Y-%m-%d'),
                                       'aqi' = col_double()))
 
 # visualize data
