@@ -384,8 +384,12 @@ infoAQI <- data.frame(ranges,health_concern,colors)
 ##############################################
 
 # Define UI for webpage
-ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE, 
+ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE, 
                  "IMPACT", id = "nav",
+                 
+                 header = tagList(
+                   useShinydashboard()
+                 ),
                  
                  # Home Tab, could include COVID-19 Map
                  tabPanel("Home",
@@ -458,31 +462,101 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
                                         tabPanel('Austin', plotlyOutput('AustinAQI'), width = 800),
                                         tabPanel('San Diego')
                                       )
-                              
-                            
                               )
                           )      
                  ),
                  
                  # Gardening Tab
                  tabPanel("Plants",
-                          mainPanel(
-                            htmlOutput("frame")
-                          ),
-                         "hardiness zones. planting suggestions. go outside, better the environment, etc."
+                          fluidRow(
+                            column(width = 8,
+                                   htmlOutput("frame")),
+                            column(width = 4,
+
+                                   "Click on a state on the map to learn more about gardening conditions
+                                    in that area!", tags$br(), tags$br(),
+                                    "You can better the environment by growing your own food, and it is important to
+                                    your health to get some sunlight!", tags$br(), tags$br(),
+                                    "Select your zone for some planting suggestions.", tags$br(), tags$br(),
+                                   pickerInput("zone_select",
+                                               choices = c("Zone 1 - 2", "Zone 3 - 4",
+                                                           "Zone 5 - 6", "Zone 7 - 8",
+                                                           "Zone 9 - 10","Zone 11 - 13"), multiple = FALSE),
+                                   textOutput("zone_notes_1_2"), textOutput("zone_notes_3_4"), textOutput("zone_notes_5_6"),
+                                   textOutput("zone_notes_7_8"), textOutput("zone_notes_9_10"), textOutput("zone_notes_11_13")
+                                  )
+                          )
                   ),
                  
                  # Our Goals Tab
                  tabPanel("Goal",
-                          tags$div(
-                            tags$h4("Our Goal"),
-                            tags$h6("goals")
-                          )
+                         h2("Our Goal"),
+                         dashboardSidebar(disable = TRUE),
+                         dashboardBody(
+                           fluidRow(
+                             valueBoxOutput("traffic_box", width = 4),
+                             valueBoxOutput("aqi_box", width = 4),
+                             valueBoxOutput("plant_box", width = 4)
+                           ),
+                           fluidRow(
+                             column(width = 4,
+                                    box(
+                                      title = "Data Results", width = NULL, status = "warning",
+                                      "talk about graphs"
+                                    ),
+                                    box(
+                                      title = "Why does this matter?", width = NULL, solidHeader = TRUE, status = "primary",
+                                      "talk about what results mean"
+                                    ),
+                                    box(
+                                      width = NULL, background = "light-blue",
+                                      "What should we do next?"
+                                    )
+                             ),
+                             
+                             column(width = 4,
+                                    box(
+                                      status = "warning", width = NULL,
+                                      "Describe air quality index"
+                                    ),
+                                    box(
+                                      title = "Data Results", width = NULL, solidHeader = TRUE, status = "primary",
+                                      "graph results"
+                                    ),
+                                    box(
+                                      title = "What should we do next?", width = NULL,
+                                      "future plans"
+                                    )
+                             ),
+                             
+                             column(width = 4,
+                                    box(
+                                      title = "Do Something!", width = NULL, solidHeader = TRUE,
+                                      "talk about how people should make sure to get some sun and interact with their environment"
+                                    ),
+                                    box(
+                                      title = "Reduce, Reuse, Recycle", width = NULL, background = "black",
+                                      "talk about how growing your own food reduces waste"
+                                    )
+                             )
+                           )
+                         )
                  ),
                  
                  # Data Sources Tab
                  tabPanel("Data",
-                          "our data")
+                          h4("We hope to have encouraged people to think about the world around them. Take a look at the data for yourself! 
+                          Each and every one of us has an impact on the environment."), tags$br(),
+                          h4("Check out some neat data. A list of our full data sources can be found on our ", 
+                          tags$a(href = "https://github.com/luizamfsantos/EarthX/tree/master/data", "github repo.")),  tags$br(),
+                          h4("COVID-19 Data"), tags$br(),
+                          numericInput("maxrows", "Rows to show", 25),
+                          verbatimTextOutput("rawtable"),
+                          downloadButton("downloadCsv", "Download as CSV"), tags$br(), tags$br(),
+                          "Adapted from timeline data published by ", 
+                          tags$a(href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series", 
+                                                                             "Johns Hopkins Center for Systems Science and Engineering."), tags$br()
+                  )
                  
 )
 
@@ -566,12 +640,8 @@ server <- function(input, output, session) {
     leafletProxy("mymap") %>% 
       clearMarkers() %>%
       clearShapes() %>%
-      addPolygons(data = reactive_polygons(), stroke = FALSE, smoothFactor = 0.1, fillOpacity = 0.15, fillColor = ~cv_pal(reactive_db_large()$activeper100k)) %>% #group = "2019-COVID (cumulative)",
-      #  label = sprintf("<strong>%s (cumulative)</strong><br/>Confirmed COVID cases: %g<br/>Deaths: %d<br/>Recovered: %d<br/>Cases per 100,000: %g", reactive_db_large()$country, reactive_db_large()$cases, reactive_db_large()$deaths, reactive_db_large()$recovered, reactive_db_large()$per100k) %>% lapply(htmltools::HTML),
-      #  labelOptions = labelOptions(
-      #               style = list("font-weight" = "normal", padding = "3px 8px", "color" = covid_col),
-      #              textsize = "15px", direction = "auto") %>%
-      
+      addPolygons(data = reactive_polygons(), stroke = FALSE, smoothFactor = 0.1, fillOpacity = 0.15, fillColor = ~cv_pal(reactive_db_large()$activeper100k)) %>%
+     
       addCircleMarkers(data = reactive_db_last24h(), lat = ~ latitude, lng = ~ longitude, weight = 1, radius = ~(new_cases)^(1/5), 
                        fillOpacity = 0.1, color = covid_col, group = "2019-COVID (new)",
                        label = sprintf("<strong>%s (past 24h)</strong><br/>Confirmed cases: %g<br/>Deaths: %d<br/>Recovered: %d<br/>Cases per 100,000: %g", reactive_db_last24h()$country, reactive_db_last24h()$new_cases, reactive_db_last24h()$new_deaths, reactive_db_last24h()$new_recovered, reactive_db_last24h()$newper100k) %>% lapply(htmltools::HTML),
@@ -691,15 +761,65 @@ server <- function(input, output, session) {
                         id = 'gilmour-planting-map', width="100%", height=550)
     test
   })
+  
+  # planting notes
+  output$zone_notes_1_2 <- renderText({
+    if(input$zone_select=="Zone 1 - 2") { paste0("Note 1 - 2") }
+  })
+  output$zone_notes_3_4 <- renderText({
+    if(input$zone_select=="Zone 3 - 4") { paste0("Note 3 - 4") }
+  })
+  output$zone_notes_5_6 <- renderText({
+    if(input$zone_select=="Zone 5 - 6") { paste0("Note 5 -6") }
+  })
+  output$zone_notes_7_8 <- renderText({
+    if(input$zone_select=="Zone 7 - 8") { paste0("Note 7 - 8") }
+  })
+  output$zone_notes_9_10 <- renderText({
+    if(input$zone_select=="Zone 9 - 10") { paste0("Note 9 - 10") }
+  })
+  output$zone_notes_11_13 <- renderText({
+    if(input$zone_select=="Zone 11 - 13") { paste0("Note 11 - 13") }
+  })
+  
 
   #air quality plots
   output$AQIinfo <- renderTable(infoAQI)
   output$AustinAQI <- renderPlotly({
     source("data/air_quality_Austin.R")
     aqiAust
-  }
-    
+  })
+  
+  # data tab
+  output$downloadCsv <- downloadHandler(
+    filename = function() {
+      paste("COVID_data_", cv_today$date[1], ".csv", sep="")
+    },
+    content = function(file) {
+      write.csv(cv_cases %>% select(c(country, date, cases, new_cases, deaths, new_deaths,
+                                      recovered, new_recovered, active_cases, 
+                                      per100k, newper100k, activeper100k)), file)
+    }
   )
+  
+  output$rawtable <- renderPrint({
+    orig <- options(width = 1000)
+    print(tail(cv_cases %>% select(c(country, date, cases, new_cases, deaths, new_deaths,
+                                     recovered, new_recovered, active_cases, 
+                                     per100k, newper100k, activeper100k)), input$maxrows), row.names = FALSE)
+    options(orig)
+  })
+  
+  # goals tab
+  output$traffic_box <- renderValueBox({
+    valueBox("Traffic", "2019 vs 2020", icon = icon("exclamation-triangle"), color = "yellow")
+  })
+  output$aqi_box <- renderValueBox({
+    valueBox("AQI", "2019 vs 2020", icon = icon("fire"), color = "orange")
+  })
+  output$plant_box <- renderValueBox({
+    valueBox("Plants",  "Gardening", icon = icon("fire"), color = "green")
+  })
 }
 
 shinyApp(ui, server)
