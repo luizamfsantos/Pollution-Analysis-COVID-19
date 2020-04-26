@@ -460,7 +460,7 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                                       tabsetPanel(
                                         tabPanel('AQI Info', tableOutput('AQIinfo'), width = 800),
                                         tabPanel('Austin', plotlyOutput('AustinAQI'), width = 800),
-                                        tabPanel('San Diego')
+                                        tabPanel('San Diego', plotlyOutput('SanDiegoAQI'), width = 800)
                                       )
                               )
                           )      
@@ -788,6 +788,10 @@ server <- function(input, output, session) {
   output$AustinAQI <- renderPlotly({
     source("data/air_quality_Austin.R")
     aqiAust
+  })
+  output$SanDiegoAQI <- renderPlotly({
+    source("data/air_quality_San_Diego.R")
+    aqiSanD
   })
   
   # data tab
