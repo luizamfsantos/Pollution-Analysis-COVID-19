@@ -465,8 +465,8 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                                       )
                             )
                             
-                          #)      
-                 )),
+                                
+                 ),
                  
                  # Gardening Tab
                  tabPanel("Plants",
