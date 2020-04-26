@@ -446,14 +446,14 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                  
                  # Air Quality Tab
                  tabPanel("Air Quality",
-                          sidebarLayout(
-                           sidebarPanel(
-                             checkboxGroupInput("data_shown", h3("Select comparisons:"),
-                                                c("2020 AQI Value" = "aqi",
-                                                  "20 Yeah High" = "20year_high",
-                                                  "20 Yeah Low" = "20year_low",
-                                                  "5 Year Median" = "5year_med"))
-                           ),
+                          # sidebarLayout(
+                          #  sidebarPanel(
+                          #    checkboxGroupInput("data_shown", h3("Select comparisons:"),
+                          #                       c("2020 AQI Value" = "aqi",
+                          #                         "20 Yeah High" = "20year_high",
+                          #                         "20 Yeah Low" = "20year_low",
+                          #                         "5 Year Median" = "5year_med"))
+                          #  ),
                             
                             mainPanel(
                                       tabsetPanel(
@@ -863,12 +863,14 @@ server <- function(input, output, session) {
   #   "5 Year Median" = "5year_med"))
   output$AQIinfo <- renderTable(infoAQI)
   output$AustinAQI <- renderPlotly({
-    x <- input$data_shown
+    # x <- input$data_shown
     source("data/air_quality_Austin.R")
-    if (x == "aqi"){aqiAust}
-    if (x == "20year_high"){aqiAustHigh}
-    if (x == "20year_low"){aqiAustLow}
-    if (x == "5year_med"){aqiAustMedian}
+    # if (x == "aqi"){aqiAust}
+    # if (x == "20year_high"){aqiAustHigh}
+    # if (x == "20year_low"){aqiAustLow}
+    # if (x == "5year_med"){aqiAustMedian}
+    # else {aqiAust}
+    aqiAust
   })
   output$SanDiegoAQI <- renderPlotly({
     source("data/air_quality_San_Diego.R")
