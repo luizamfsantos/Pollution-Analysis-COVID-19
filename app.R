@@ -437,17 +437,13 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                             mainPanel(
                               tabsetPanel(
                                 tabPanel("Traffic Volume", plotlyOutput("all_tc_plot"), width = 6),
-<<<<<<< HEAD
                                 tabPanel("Traffic Collision", plotlyOutput("tcol_plot"), width = 800),
                                 tabPanel("Current", 
                                          tags$h4("Austin Traffic Volume April 19 - April 26"),
                                          imageOutput('austin_tc'), 
                                          tags$h4("San Diego Traffic Volume April 19 - April 26"),
                                          imageOutput('san_diego_tc'))
-=======
-                                tabPanel("Traffic Collision", plotlyOutput("tcol_plot"), width = 800)
-                                #,tabPanel("Combined")
->>>>>>> 238d09bac3fff1dae1722d9ca40ee012c861922c
+                               # tabPanel("Traffic Collision", plotlyOutput("tcol_plot"), width = 800)
                               )
                             )
                           )
@@ -484,8 +480,6 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                             fluidRow(
                               column(width = 8,
                                      uiOutput("frame"),
-                                     valueBoxOutput("zone_notes_box", width = 8),
-                                     imageOutput('zone_notes_3_9')
                               ),
                               column(width = 4,
                                        "Click on a state on the map to learn more about gardening conditions
@@ -499,6 +493,10 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                                                                "Zone 9 - 10","Zone 11 - 13"), multiple = FALSE)
                                      )
                             ),
+                            fluidRow(
+                              valueBoxOutput("zone_notes_box", width = 8),
+                              imageOutput('zone_notes_3_9')
+                            )
                           )
                   ),
                  
@@ -952,7 +950,7 @@ server <- function(input, output, session) {
       src = "data/packaging_chart.png",
       contentType = "image/png",
       height = 300,
-      width = 300,
+      width = 400,
       alt = "packaging chart"
     ))
   }, deleteFile = FALSE)
