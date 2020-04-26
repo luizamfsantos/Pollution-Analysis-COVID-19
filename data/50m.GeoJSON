@@ -42,7 +42,7 @@
   
   
 
-  <meta name="request-id" content="F8EF:11CB:693A6B:A054EA:5EA4D90E" data-pjax-transient="true"/><meta name="html-safe-nonce" content="b003440209a946db2f79209dc777646c1a3723d2" data-pjax-transient="true"/><meta name="visitor-payload" content="eyJyZWZlcnJlciI6IiIsInJlcXVlc3RfaWQiOiJGOEVGOjExQ0I6NjkzQTZCOkEwNTRFQTo1RUE0RDkwRSIsInZpc2l0b3JfaWQiOiI3MTg0ODM0MDc1NjA2NDQwMjA2IiwicmVnaW9uX2VkZ2UiOiJpYWQiLCJyZWdpb25fcmVuZGVyIjoiaWFkIn0=" data-pjax-transient="true"/><meta name="visitor-hmac" content="1012921151bde33974d3e44c1c7e7bb234404f48a36ead2b6c39e87f21ab5103" data-pjax-transient="true"/>
+  <meta name="request-id" content="FC14:310B:D7FBF4:13B9466:5EA4DCCB" data-pjax-transient="true"/><meta name="html-safe-nonce" content="88b77e10b708a9372647ec9a28ed0102985b11bc" data-pjax-transient="true"/><meta name="visitor-payload" content="eyJyZWZlcnJlciI6IiIsInJlcXVlc3RfaWQiOiJGQzE0OjMxMEI6RDdGQkY0OjEzQjk0NjY6NUVBNERDQ0IiLCJ2aXNpdG9yX2lkIjoiNTk2MDM5OTI3ODE2NzA4ODMzMSIsInJlZ2lvbl9lZGdlIjoiaWFkIiwicmVnaW9uX3JlbmRlciI6ImlhZCJ9" data-pjax-transient="true"/><meta name="visitor-hmac" content="362c98b626fa24654fbea6779b8a79dee9f9979ba0c7e73efdf7b61778044c58" data-pjax-transient="true"/>
 
 
 
@@ -287,7 +287,7 @@
           spellcheck="false"
           autocomplete="off"
           >
-          <input type="hidden" data-csrf="true" class="js-data-jump-to-suggestions-path-csrf" value="lVTLk2zbRYAMGGGT0L/QtafwOgQGwKLKThwZassi1ijdohC4UbvaF+Wt/QwSkz5eZPQ9IUFg2FxWlapBvDbKng==" />
+          <input type="hidden" data-csrf="true" class="js-data-jump-to-suggestions-path-csrf" value="HFseRNoGuGZslBiyC2Gmpk63Oy87XA8Rn2uC3kxjnxD7Ko5ktPz9ZhBezW6yYUfb7Wpz8XGdE2rWvQGMJE1Mjw==" />
           <input type="hidden" class="js-site-search-type-field" name="type" >
             <img src="https://github.githubassets.com/images/search-key-slash.svg" alt="" class="mr-2 header-search-key-slash">
 
@@ -811,7 +811,7 @@ Includes shift to 50-metre resolution mapping polygons" class="link-gray" href="
               <svg class="octicon octicon-device-desktop" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M15 2H1c-.55 0-1 .45-1 1v9c0 .55.45 1 1 1h5.34c-.25.61-.86 1.39-2.34 2h8c-1.48-.61-2.09-1.39-2.34-2H15c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm0 9H1V3h14v8z"></path></svg>
           </a>
 
-          <!-- '"` --><!-- </textarea></xmp> --></option></form><form class="inline-form" action="/eparker12/nCoV_tracker/delete/master/input_data/50m.geojson" accept-charset="UTF-8" method="post"><input type="hidden" data-csrf="true" name="authenticity_token" value="swFeAlkjLPrXaShzeWFxxhAsJ3LSoCCg++D0St8rY2ciHqlQu7vHkyybeZK5c7jKfghS0n40P9ywzw5rMVldug==" />
+          <!-- '"` --><!-- </textarea></xmp> --></option></form><form class="inline-form" action="/eparker12/nCoV_tracker/delete/master/input_data/50m.geojson" accept-charset="UTF-8" method="post"><input type="hidden" data-csrf="true" name="authenticity_token" value="Zjh0G1D2Yc/9xmSleGs3eD+Lq5iY0N5gUlHdj/WjQOIhSR1PlIRMdu30JbA0rVe+l+dKGZCx/46X5MUezvo+eg==" />
             <button class="btn-octicon btn-octicon-danger tooltipped tooltipped-nw" type="submit"
               aria-label="You must be signed in to make or propose changes" data-disable-with>
               <svg class="octicon octicon-trashcan" viewBox="0 0 12 16" version="1.1" width="12" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"></path></svg>
@@ -828,14 +828,14 @@ Includes shift to 50-metre resolution mapping polygons" class="link-gray" href="
       
   <div class="render-wrapper ">
     <div class="render-container is-render-pending js-render-target  "
-      data-identity="ec9c7ab4-e1fe-4196-a848-5ec2752c1238"
+      data-identity="33c793a2-4b1d-45cb-b77d-ae58c0ec991f"
       data-host="https://render.githubusercontent.com"
       data-type="geojson">
       <img class="octospinner mx-auto" alt="" src="https://github.githubassets.com/images/spinners/octocat-spinner-128.gif" width="64" height="64" />
       <div class="render-viewer-error">Sorry, something went wrong. <a href="https://github.com/eparker12/nCoV_tracker/blob/master/input_data/50m.geojson">Reload?</a></div>
       <div class="render-viewer-fatal">Sorry, we cannot display this file.</div>
       <div class="render-viewer-invalid">Sorry, this file is invalid so it cannot be displayed.</div>
-      <iframe class="render-viewer " src="https://render.githubusercontent.com/view/geojson?commit=20244818871f1654c7801bca4c0bdacce82cd140&amp;enc_url=68747470733a2f2f7261772e67697468756275736572636f6e74656e742e636f6d2f657061726b657231322f6e436f565f747261636b65722f323032343438313838373166313635346337383031626361346330626461636365383263643134302f696e7075745f646174612f35306d2e67656f6a736f6e&amp;nwo=eparker12%2FnCoV_tracker&amp;path=input_data%2F50m.geojson&amp;repository_id=245411655&amp;repository_type=Repository#ec9c7ab4-e1fe-4196-a848-5ec2752c1238" sandbox="allow-scripts allow-same-origin allow-top-navigation" title="File display">
+      <iframe class="render-viewer " src="https://render.githubusercontent.com/view/geojson?commit=20244818871f1654c7801bca4c0bdacce82cd140&amp;enc_url=68747470733a2f2f7261772e67697468756275736572636f6e74656e742e636f6d2f657061726b657231322f6e436f565f747261636b65722f323032343438313838373166313635346337383031626361346330626461636365383263643134302f696e7075745f646174612f35306d2e67656f6a736f6e&amp;nwo=eparker12%2FnCoV_tracker&amp;path=input_data%2F50m.geojson&amp;repository_id=245411655&amp;repository_type=Repository#33c793a2-4b1d-45cb-b77d-ae58c0ec991f" sandbox="allow-scripts allow-same-origin allow-top-navigation" title="File display">
           Viewer requires iframe.
       </iframe>
     </div>

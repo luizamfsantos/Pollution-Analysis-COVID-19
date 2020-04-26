@@ -16,11 +16,8 @@ if(!require(RColorBrewer)) install.packages("RColorBrewer")
 if(!require(leaflet)) install.packages("leaflet")
 if(!require(plotly)) install.packages("plotly")
 if(!require(geojsonio)) install.packages("geojsonio")
-<<<<<<< HEAD
 if(!require(rgdal)) install.packages("rgdal")
-=======
 if(!require(stringr)) install.packages("stringr")
->>>>>>> 5acf38e08dfbbd0055e176bd74c523822464a104
 
 library(shiny)
 library(shinyWidgets)
@@ -35,7 +32,6 @@ library(geojsonio)
 library(plotly)
 library(ggiraph)
 library(maps)
-<<<<<<< HEAD
 library(rgdal)
 library(RCurl)
 library(stringr)
@@ -47,7 +43,7 @@ downloader::download(url = "https://github.com/eparker12/nCoV_tracker/blob/maste
 covid_col = "#cc4c02"
 covid_other_col = "#662506"
 
-# import data
+# import data for covid map
 f1 <- getURL('https://raw.githubusercontent.com/eparker12/nCoV_tracker/master/input_data/coronavirus.csv', ssl.verifyhost = FALSE, ssl.verifypeer = FALSE)
 f2 <- getURL('https://raw.githubusercontent.com/eparker12/nCoV_tracker/master/input_data/countries_codes_and_coordinates.csv', ssl.verifyhost = FALSE, ssl.verifypeer = FALSE)
 f3 <- getURL('https://raw.githubusercontent.com/eparker12/nCoV_tracker/master/input_data/50m.geojson', ssl.verifyhost = FALSE, ssl.verifypeer = FALSE)
@@ -176,8 +172,6 @@ country_cases_cumulative_log = function(cv_cases, start_point=c("Date", "Day of 
 }
 
 
-
-
 ### DATA PROCESSING: COVID-19 ###
 
 # extract time stamp from cv_cases
@@ -239,12 +233,10 @@ for (i in 1:length(unique(cv_cases_continent$continent))) {
   cv_cases_continent$days_since_case100[cv_cases_continent$continent==continent_name] = continent_db$days_since_case100
   cv_cases_continent$days_since_death10[cv_cases_continent$continent==continent_name] = continent_db$days_since_death10
 }
-#write.csv(cv_cases_continent, "input_data/coronavirus_continent.csv")
 
 # aggregate at global level
 cv_cases_global = cv_cases %>% select(c(cases, new_cases, deaths, new_deaths, date, global_level)) %>% group_by(global_level, date) %>% summarise_each(funs(sum)) %>% data.frame()
 cv_cases_global$days_since_case100 = cv_cases_global$days_since_death10 = 1:nrow(cv_cases_global)
-#write.csv(cv_cases_global, "input_data/coronavirus_global.csv")
 
 # select large countries for mapping polygons
 cv_large_countries = cv_today %>% filter(alpha3 %in% worldcountry$ADM0_A3)
@@ -267,8 +259,7 @@ basemap = leaflet(plot_map) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
   fitBounds(~-100,-50,~80,80) %>%
   addLegend("bottomright", pal = cv_pal, values = ~cv_large_countries$per100k,
-            title = "<small>Active cases per 100,000</small>") #%>%
-#fitBounds(0,-25,90,65) # alternative coordinates for closer zoom
+            title = "<small>Active cases per 100,000</small>") 
 
 # sum cv case counts by date
 cv_aggregated = aggregate(cv_cases$cases, by=list(Category=cv_cases$date), FUN=sum)
@@ -289,9 +280,8 @@ cls = rep(c(brewer.pal(8,"Dark2"), brewer.pal(10, "Paired"), brewer.pal(12, "Set
 cls_names = c(as.character(unique(cv_cases$country)), as.character(unique(cv_cases_continent$continent)),"Global")
 country_cols = cls[1:length(cls_names)]
 names(country_cols) = cls_names
-=======
+
 library(stringr)
->>>>>>> 5acf38e08dfbbd0055e176bd74c523822464a104
 
 
 # Import Data
@@ -342,7 +332,6 @@ names(tcol_aggregated) <- c("date", "collisions", "year")
 
 #### Plotting functions for traffic count and collisions ####
 
-
 # function to plot traffic counts (April 2018 - 2020)
 # TODO: present graphs better
 all_tc_plot = function(tc_aggregated, yr) {
@@ -369,7 +358,6 @@ all_tc_plot = function(tc_aggregated, yr) {
   g1
 }
 
-
 tcol_plot = function(tcol_aggregated, yr) {
   plot_df = subset(tcol_aggregated, year<=yr)
   g1 <- ggplot(plot_df, aes(x = date, y = collisions)) + geom_line(aes(group = 1)) + 
@@ -385,14 +373,13 @@ tcol_plot = function(tcol_aggregated, yr) {
 }
 
 
-
-
 # table with Air Quality Index Explanations from https://www.epa.gov/outdoor-air-quality-data/air-data-basic-information
 ranges <- c('0-50', '51-100', '101-150', '151-200', '201-300','301-500')
 health_concern <- c('Good', 'Moderate', 'Unhealthy for Sensitive Groups', 
 'Unhealthy', 'Very Unhealthy', 'Hazardous')
 colors <- c('green', 'yellow', 'orange', 'red', 'purple', 'maroon')
 infoAQI <- data.frame(ranges,health_concern,colors) 
+
 ##############################################
 
 # Define UI for webpage
@@ -697,14 +684,13 @@ server <- function(input, output, session) {
     tcol_plot(tcol_aggregated, input$plot_year)
   })
   
-<<<<<<< HEAD
   # plant gardening zones map
   output$frame <- renderUI({
     test <- tags$iframe(src = 'https://www.gilmour.com/gilmour_map/map.html', 
                         id = 'gilmour-planting-map', width="100%", height=550)
     test
   })
-=======
+
   #air quality plots
   output$AQIinfo <- renderTable(infoAQI)
   output$AustinAQI <- renderPlotly({
@@ -713,7 +699,6 @@ server <- function(input, output, session) {
   }
     
   )
->>>>>>> 5acf38e08dfbbd0055e176bd74c523822464a104
 }
 
 shinyApp(ui, server)
