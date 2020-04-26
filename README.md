@@ -26,6 +26,7 @@ Plant Data Sources
 
   - https://www.ecoscraps.com/blogs/gardening-farming/87136132-planting-by-zone-a-complete-guide
   - https://www.ufseeds.com/learning/planting-schedules/
+  - https://www.epa.gov/facts-and-figures-about-materials-waste-and-recycling/containers-and-packaging-product-specific-data
   
 COVID-19 Map Data Source
 

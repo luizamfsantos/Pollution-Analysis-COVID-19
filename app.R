@@ -432,13 +432,17 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                               radioButtons("plot_year", "Date Range: ",
                                           c("January 2020" = "20", "April 2019" = "19", 
                                             "April 2018" = "18", "All" = "all")),
-                              "San Diego Data"
+                              "These options are for the San Diego Data in the first two tabs."
                             ),
                             mainPanel(
                               tabsetPanel(
                                 tabPanel("Traffic Volume", plotlyOutput("all_tc_plot"), width = 6),
                                 tabPanel("Traffic Collision", plotlyOutput("tcol_plot"), width = 800),
-                                tabPanel("Combined")
+                                tabPanel("Current", 
+                                         tags$h4("Austin Traffic Volume April 19 - April 26"),
+                                         imageOutput('austin_tc'), 
+                                         tags$h4("San Diego Traffic Volume April 19 - April 26"),
+                                         imageOutput('san_diego_tc'))
                               )
                             )
                           )
@@ -473,25 +477,24 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                  tabPanel("Plants",
                           dashboardSidebar(disable = TRUE),
                           dashboardBody(
-                          fluidRow(
-                            column(width = 8,
-                                   uiOutput("frame")
-                            ),
-                            column(width = 4,
-                                     "Click on a state on the map to learn more about gardening conditions
-                                      in that area!", tags$br(), tags$br(),
-                                     "You can better the environment by growing your own food, and it is important to
-                                      your health to get some sunlight!", tags$br(), tags$br(),
-                                     "Select your zone for some planting suggestions.", tags$br(), tags$br(),
-                                     pickerInput("zone_select",
-                                                 choices = c("Zone 1 - 2", "Zone 3", "Zone 4",
-                                                             "Zone 5", "Zone 6", "Zone 7", "Zone 8", "Zone 9",
-                                                             "Zone 9 - 10","Zone 11 - 13"), multiple = FALSE))),
-                          #dashboardBody(
                             fluidRow(
-                                    valueBoxOutput("zone_notes_box", width = 8),
-                                    imageOutput("zone_notes_3_9", width = 8)
-                            )
+                              column(width = 8,
+                                     uiOutput("frame"),
+                                     valueBoxOutput("zone_notes_box", width = 8),
+                                     imageOutput('zone_notes_3_9')
+                              ),
+                              column(width = 4,
+                                       "Click on a state on the map to learn more about gardening conditions
+                                        in that area!", tags$br(), tags$br(),
+                                       "You can better the environment by growing your own food, and it is important to
+                                        your health to get some sunlight!", tags$br(), tags$br(),
+                                       "Select your zone for some planting suggestions.", tags$br(), tags$br(),
+                                       pickerInput("zone_select",
+                                                   choices = c("Zone 1 - 2", "Zone 3", "Zone 4",
+                                                               "Zone 5", "Zone 6", "Zone 7", "Zone 8", "Zone 9",
+                                                               "Zone 9 - 10","Zone 11 - 13"), multiple = FALSE)
+                                     )
+                            ),
                           )
                   ),
                  
@@ -509,15 +512,20 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                              column(width = 4,
                                     box(
                                       title = "Data Results", width = NULL, status = "warning",
-                                      "talk about graphs"
+                                      "The data was able to show that traffic congestion levels and collisions have definitely 
+                                      decreased."
                                     ),
                                     box(
                                       title = "Why does this matter?", width = NULL, solidHeader = TRUE, status = "primary",
-                                      "talk about what results mean"
+                                      "If remote work was more feasible, and people no longer had their commute, the impact this has 
+                                      on air quality is a positive one."
                                     ),
                                     box(
                                       width = NULL, background = "light-blue",
-                                      "What should we do next?"
+                                      "Once everything settles back to the normal way of life, traffic congestion and collision 
+                                      levels will steadily rise again unless people consider a change in their life. Allowing 
+                                      employees that are able to work from home to work from home could help keep these traffic levels down.
+                                       And therefore help the environment."
                                     )
                              ),
                              
@@ -539,11 +547,18 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                              column(width = 4,
                                     box(
                                       title = "Do Something!", width = NULL, solidHeader = TRUE,
-                                      "talk about how people should make sure to get some sun and interact with their environment"
+                                      "It has now been shown that COVID-19 exposure to heat kills it off faster!
+                                      We hope to encourage you to go outside, get some sun and interact with your environment.
+                                      Starting your own garden is a great way to do all of this."
                                     ),
                                     box(
                                       title = "Reduce, Reuse, Recycle", width = NULL, background = "black",
-                                      "talk about how growing your own food reduces waste"
+                                      "Growing your own food is not only beneficial to you, but to our environment 
+                                      as well. Containers and packaging make up a major portion of municipal solid waste (MSW), 
+                                      amounting to 80.1 million tons of generation in 2017 (29.9 percent of total generation). 
+                                      Packaging is the product used to wrap or protect goods, including food.
+                                      Plastic containers and packaging make up approximately 5.3 percent of MSW generation.", tags$br(), tags$br(),
+                                      imageOutput('package_chart')
                                     )
                              )
                            )
@@ -576,7 +591,6 @@ server <- function(input, output, session) {
   
   reactive_db = reactive({
     cv_cases %>% filter(date == input$plot_date)
-    # reactive = cv_cases %>% filter(date == "2020-04-07")
   })
   
   reactive_db_last24h = reactive({
@@ -585,7 +599,6 @@ server <- function(input, output, session) {
   
   reactive_db_large = reactive({
     large_countries = reactive_db() %>% filter(alpha3 %in% worldcountry$ADM0_A3)
-    #large_countries = reactive %>% filter(alpha3 %in% worldcountry$ADM0_A3)
     worldcountry_subset = worldcountry[worldcountry$ADM0_A3 %in% large_countries$alpha3, ]
     large_countries = large_countries[match(worldcountry_subset$ADM0_A3, large_countries$alpha3),]
     large_countries
@@ -762,6 +775,23 @@ server <- function(input, output, session) {
     tcol_plot(tcol_aggregated, input$plot_year)
   })
   
+  output$austin_tc <- renderImage({
+    tags$h2("Austin")
+    return(list(
+      src = "data/austin_tcount.png",
+      contentType = "image/png",
+      alt = "austin 7day traffic volume"
+    ))
+  }, deleteFile = FALSE)
+  output$san_diego_tc <- renderImage({
+    tags$h2("San Diego")
+    return(list(
+      src = "data/san_diego_tcount.png",
+      contentType = "image/png",
+      alt = "san diego 7day traffic volume"
+    ))
+  }, deleteFile = FALSE)
+  
   # plant gardening zones map
   output$frame <- renderUI({
     test <- tags$iframe(src = 'https://www.gilmour.com/gilmour_map/map.html', 
@@ -771,10 +801,12 @@ server <- function(input, output, session) {
   
   # planting notes
   output$zone_notes_box <- renderValueBox({
+    z12 <- "Growing season: April – September. Best plants to grow: 
+    Vine tomatores, lettucekale, broccoli, asparagus, eggplant, other vegetables with 
+    short time between planting and harves"
+    
     if(input$zone_select=="Zone 1 - 2"){
-      valueBox("Zones 1 - 2", "Growing season: April – September. Best plants to grow: 
-      Vine tomatores, lettucekale, broccoli, asparagus, eggplant, other vegetables with 
-               short time between planting and harves", color = "blue")
+      valueBox("Zones 1 - 2", subtitle = z12, color = "blue")
     }
     else if(input$zone_select=="Zone 9 - 10"){
       valueBox("Zones 9 - 10", "Growing season: February-November. Best plants to grow: 
@@ -787,14 +819,10 @@ server <- function(input, output, session) {
       pineapple, pumpkin, mango, papaya, Thai chili peppers, citrus, bananas, taro", color = "red")
     }
   })
-  #output$zone_notes_1_2 <- renderText({
-   # if(input$zone_select=="Zone 1 - 2") { 
-    #  paste0("Growing season: April – September", tags$br(),
-     #       "Best plants to grow: Vine tomatores, lettucekale, broccoli, 
-      #       asparagus, eggplant, other vegetables with short time between planting and harvest")
-    #}
-  #})
   output$zone_notes_3_9 <- renderImage({
+    if (is.null(input$zone_select))
+      return(NULL)
+    
     if(input$zone_select=="Zone 3") { 
       return(list(
         src = "data/zoneInfo/zone3.png",
@@ -845,16 +873,6 @@ server <- function(input, output, session) {
       ))
     }
   }, deleteFile = FALSE)
-  
-  #output$zone_notes_11_13 <- renderText({
-   # if(input$zone_select=="Zone 11 - 13") { 
-    #  paste0("Growing season: Year-round", tags$br(), 
-     #        "Best plants to grow: kale, okinawa spinach, pole beans, passionfruit, 
-      #       sweet potato, red potato, cassava, pineapple, pumpkin, mango, papaya, 
-      #       Thai chili peppers, citrus, bananas, taro") 
-    #}
-#  })
-  
 
   #air quality plots
   output$AQIinfo <- renderTable(infoAQI)
@@ -913,6 +931,16 @@ server <- function(input, output, session) {
   output$plant_box <- renderValueBox({
     valueBox("Plants",  "Gardening", icon = icon("fire"), color = "green")
   })
+  
+  output$package_chart <- renderImage({
+    return(list(
+      src = "data/packaging_chart.png",
+      contentType = "image/png",
+      height = 300,
+      width = 300,
+      alt = "packaging chart"
+    ))
+  }, deleteFile = FALSE)
 }
 
 shinyApp(ui, server)
