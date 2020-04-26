@@ -20,7 +20,7 @@ austin_air_data <- read_csv('data/air_quality/epa_air_data_daily_air_quality_ozo
 
 
 # visualize data
-aqiAust = ggplot(data, aes(Date,`2020 AQI Value`)) +
+aqiAust = ggplot(austin_air_data, aes(Date,`2020 AQI Value`)) +
   geom_line(aes(Date,`2020 AQI Value`), color = 'grey50') + geom_point()
 
 
