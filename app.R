@@ -438,7 +438,7 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                               tabsetPanel(
                                 tabPanel("Traffic Volume", plotlyOutput("all_tc_plot"), width = 6),
                                 tabPanel("Traffic Collision", plotlyOutput("tcol_plot"), width = 800),
-                                tabPanel("Combined")
+                                #tabPanel("Combined")
                               )
                             )
                           )
