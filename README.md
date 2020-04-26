@@ -13,6 +13,8 @@ Air Quality Data Source
 Traffic Data Sources
 
   - https://data.sandiego.gov/datasets/traffic-volumes/
+  - https://data.austintexas.gov/Transportation-and-Mobility/Radar-Traffic-Counts/i626-g7ub
+  - https://data.austintexas.gov/Transportation-and-Mobility/Real-Time-Traffic-Incident-Reports/dx9v-zd7x
   
 Employment Data Sources  
 
