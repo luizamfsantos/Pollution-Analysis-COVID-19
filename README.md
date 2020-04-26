@@ -1,4 +1,4 @@
-# EarthX
+# Impact
 
 EarthXHack 2020
 
