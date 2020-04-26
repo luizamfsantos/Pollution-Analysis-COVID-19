@@ -16,7 +16,11 @@ if(!require(RColorBrewer)) install.packages("RColorBrewer")
 if(!require(leaflet)) install.packages("leaflet")
 if(!require(plotly)) install.packages("plotly")
 if(!require(geojsonio)) install.packages("geojsonio")
+<<<<<<< HEAD
 if(!require(rgdal)) install.packages("rgdal")
+=======
+if(!require(stringr)) install.packages("stringr")
+>>>>>>> 5acf38e08dfbbd0055e176bd74c523822464a104
 
 library(shiny)
 library(shinyWidgets)
@@ -31,6 +35,7 @@ library(geojsonio)
 library(plotly)
 library(ggiraph)
 library(maps)
+<<<<<<< HEAD
 library(rgdal)
 library(RCurl)
 library(stringr)
@@ -284,6 +289,9 @@ cls = rep(c(brewer.pal(8,"Dark2"), brewer.pal(10, "Paired"), brewer.pal(12, "Set
 cls_names = c(as.character(unique(cv_cases$country)), as.character(unique(cv_cases_continent$continent)),"Global")
 country_cols = cls[1:length(cls_names)]
 names(country_cols) = cls_names
+=======
+library(stringr)
+>>>>>>> 5acf38e08dfbbd0055e176bd74c523822464a104
 
 
 # Import Data
@@ -376,6 +384,15 @@ tcol_plot = function(tcol_aggregated, yr) {
   g1
 }
 
+
+
+
+# table with Air Quality Index Explanations from https://www.epa.gov/outdoor-air-quality-data/air-data-basic-information
+ranges <- c('0-50', '51-100', '101-150', '151-200', '201-300','301-500')
+health_concern <- c('Good', 'Moderate', 'Unhealthy for Sensitive Groups', 
+'Unhealthy', 'Very Unhealthy', 'Hazardous')
+colors <- c('green', 'yellow', 'orange', 'red', 'purple', 'maroon')
+infoAQI <- data.frame(ranges,health_concern,colors) 
 ##############################################
 
 # Define UI for webpage
@@ -428,7 +445,7 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
                             mainPanel(
                               tabsetPanel(
                                 tabPanel("Traffic Volume", plotlyOutput("all_tc_plot"), width = 6),
-                                tabPanel("Traffic Collision", plotlyOutput("tcol_plot", width = 800)),
+                                tabPanel("Traffic Collision", plotlyOutput("tcol_plot"), width = 800),
                                 tabPanel("Combined")
                               )
                             )
@@ -447,7 +464,15 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
                               textOutput("Notes.")
                             ),
                             
-                            mainPanel(width = 6)
+                            mainPanel(
+                                      tabsetPanel(
+                                        tabPanel('AQI Info', tableOutput('AQIinfo'), width = 800),
+                                        tabPanel('Austin', plotlyOutput('AustinAQI'), width = 800),
+                                        tabPanel('San Diego')
+                                      )
+                              
+                            
+                              )
                           )      
                  ),
                  
@@ -672,12 +697,23 @@ server <- function(input, output, session) {
     tcol_plot(tcol_aggregated, input$plot_year)
   })
   
+<<<<<<< HEAD
   # plant gardening zones map
   output$frame <- renderUI({
     test <- tags$iframe(src = 'https://www.gilmour.com/gilmour_map/map.html', 
                         id = 'gilmour-planting-map', width="100%", height=550)
     test
   })
+=======
+  #air quality plots
+  output$AQIinfo <- renderTable(infoAQI)
+  output$AustinAQI <- renderPlotly({
+    source("data/air_quality_Austin.R")
+    aqiAust
+  }
+    
+  )
+>>>>>>> 5acf38e08dfbbd0055e176bd74c523822464a104
 }
 
 shinyApp(ui, server)
