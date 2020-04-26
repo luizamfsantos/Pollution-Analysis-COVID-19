@@ -2,7 +2,7 @@
 
 EarthXHack 2020
 
-Our goal in this project is to be able to show some trends of impact COVID-19 has had on various areas across the US.
+Our goal in this project is to be able to show some trends of impact the shelther-in-place order has had on various areas across the US.
 
 
 
@@ -70,7 +70,7 @@ Python packages:
 - sqlite3
 
 ## Future Plans:
-Our goal is to: 
+Some future plans are to add more cities to get a better picture. We were able to write a script that can draw the data for air quality and employment data from multiple cities but due to time constraints we were not able to implement it. We planned to make a Machine Learning model to determine which sector caused the most decrease in pollution and intersect with jobs that can be turned remote. This information can be beneficial for companies and governments in an attempt to be take better care of our environment. 
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
