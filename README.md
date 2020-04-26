@@ -31,4 +31,53 @@ Plant Data Sources
 COVID-19 Map Data Source
 
   - https://github.com/eparker12/nCoV_tracker/tree/master/input_data
+  
+## Built With
+- R
+- Jupyter Notebooks
+- Python 3.7
+- Shiny
+
+R packages:
+- shiny
+- shinyWidgets
+- shinydashboard
+- shinythemes
+- dplyr
+- ggplot2
+- reshape2
+- RColorBrewer
+- leaflet
+- geojsonio
+- plotly
+- ggiraph
+- maps
+- rgdal
+- RCurl
+- stringr
+- markdown
+- readr
+
+Python packages:
+- requests
+- json
+- bs4
+- re
+- pandas
+- numpy
+- matplotlib
+- seaborn
+- sqlite3
+
+## Future Plans:
+Our goal is to: 
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## Authors 
+Leidy Buescher
+Luiza Santos
+
+
 
