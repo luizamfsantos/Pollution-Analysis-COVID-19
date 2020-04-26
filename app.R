@@ -437,12 +437,17 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                             mainPanel(
                               tabsetPanel(
                                 tabPanel("Traffic Volume", plotlyOutput("all_tc_plot"), width = 6),
+<<<<<<< HEAD
                                 tabPanel("Traffic Collision", plotlyOutput("tcol_plot"), width = 800),
                                 tabPanel("Current", 
                                          tags$h4("Austin Traffic Volume April 19 - April 26"),
                                          imageOutput('austin_tc'), 
                                          tags$h4("San Diego Traffic Volume April 19 - April 26"),
                                          imageOutput('san_diego_tc'))
+=======
+                                tabPanel("Traffic Collision", plotlyOutput("tcol_plot"), width = 800)
+                                #,tabPanel("Combined")
+>>>>>>> 238d09bac3fff1dae1722d9ca40ee012c861922c
                               )
                             )
                           )
@@ -450,14 +455,13 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                  
                  # Air Quality Tab
                  tabPanel("Air Quality",
-                          #sidebarLayout(
+                          # sidebarLayout(
                           #  sidebarPanel(
                           #    checkboxGroupInput("data_shown", h3("Select comparisons:"),
-                          #                       c("20 Yeah High" = "20year_high",
+                          #                       c("2020 AQI Value" = "aqi",
+                          #                         "20 Yeah High" = "20year_high",
                           #                         "20 Yeah Low" = "20year_low",
-                          #                         "5 Year Median" = "5year_med",
-                          #                         "2020 AQI Value" = "aqi")),
-                          #    textOutput("Notes.")
+                          #                         "5 Year Median" = "5year_med"))
                           #  ),
                             
                             mainPanel(
@@ -470,7 +474,7 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                                       )
                             )
                             
-                          #)      
+                                
                  ),
                  
                  # Gardening Tab
@@ -875,9 +879,20 @@ server <- function(input, output, session) {
   }, deleteFile = FALSE)
 
   #air quality plots
+  # "data_shown", h3("Select comparisons:"),
+  # c("2020 AQI Value" = "aqi",
+  #   "20 Yeah High" = "20year_high",
+  #   "20 Yeah Low" = "20year_low",
+  #   "5 Year Median" = "5year_med"))
   output$AQIinfo <- renderTable(infoAQI)
   output$AustinAQI <- renderPlotly({
+    # x <- input$data_shown
     source("data/air_quality_Austin.R")
+    # if (x == "aqi"){aqiAust}
+    # if (x == "20year_high"){aqiAustHigh}
+    # if (x == "20year_low"){aqiAustLow}
+    # if (x == "5year_med"){aqiAustMedian}
+    # else {aqiAust}
     aqiAust
   })
   output$SanDiegoAQI <- renderPlotly({
