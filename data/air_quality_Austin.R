@@ -1,5 +1,5 @@
 # import libraries
-my_packages <- c("readr","xts","zoo", "ggplot2")
+my_packages <- c("readr","ggplot2")
 lapply(my_packages,library,character.only = TRUE)
 
 # import data
