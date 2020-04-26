@@ -4,6 +4,7 @@ EarthXHack 2020
 
 Our goal in this project is to be able to show some trends of impact the shelther-in-place order has had on various areas across the US.
 
+To run this app, load shiny library in RStudio and run this command: runGitHub("EarthX","luizamfsantos").
 
 
 Air Quality Data Source
