@@ -2,7 +2,7 @@
 
 EarthXHack 2020
 
-Our goal in this project is to be able to show some trends of impact the shelther-in-place order has had on various areas across the US.
+Our goal in this project is to be able to show some trends of impact the shelther-in-place order has had on various areas across the US. We want to increase awareness of how we all contribute to the environment around us. (An easy way to get involved in helping your environment is growing your own food!)
 
 To run this app, load shiny library in RStudio and run this command: runGitHub("EarthX","luizamfsantos").
 
