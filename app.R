@@ -18,6 +18,7 @@ if(!require(plotly)) install.packages("plotly")
 if(!require(geojsonio)) install.packages("geojsonio")
 if(!require(rgdal)) install.packages("rgdal")
 if(!require(stringr)) install.packages("stringr")
+if(!require(xts)) install.packages("xts")
 
 library(shiny)
 library(shinyWidgets)
@@ -36,6 +37,8 @@ library(rgdal)
 library(RCurl)
 library(stringr)
 library(markdown)
+library(xts)
+library(readr)
 
 downloader::download(url = "https://github.com/eparker12/nCoV_tracker/blob/master/input_data/50m.geojson", destfile = "data/50m.GeoJSON")
 
