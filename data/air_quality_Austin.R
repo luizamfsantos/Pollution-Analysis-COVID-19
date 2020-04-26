@@ -3,7 +3,7 @@ my_packages <- c("readr","ggplot2")
 lapply(my_packages,library,character.only = TRUE)
 
 # import data
-austin_air_data <- read_csv('data/air_quality/epa_air_data_daily_air_quality_ozone_pm25_austin_roundrock.csv',
+austin_air_data <- read_csv('air_quality/epa_air_data_daily_air_quality_ozone_pm25_austin_roundrock.csv',
                  col_names = TRUE,
                  col_types = cols(
                    'Date' = col_date(format = "%m/%d/%Y"),
