@@ -9,6 +9,7 @@ Our goal in this project is to be able to show some trends of impact COVID-19 ha
 Air Quality Data Source
 
   - https://www.epa.gov/outdoor-air-quality-data/air-data-daily-air-quality-tracker
+  - https://www.nasa.gov/feature/goddard/2020/drop-in-air-pollution-over-northeast
 
 Traffic Data Sources
 
@@ -24,6 +25,7 @@ Employment Data Sources
 Plant Data Sources
 
   - https://www.ecoscraps.com/blogs/gardening-farming/87136132-planting-by-zone-a-complete-guide
+  - https://www.ufseeds.com/learning/planting-schedules/
   
 COVID-19 Map Data Source
 

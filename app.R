@@ -446,45 +446,52 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                  
                  # Air Quality Tab
                  tabPanel("Air Quality",
-                          sidebarLayout(
-                            sidebarPanel(
-                              checkboxGroupInput("data_shown", h3("Select comparisons:"),
-                                                 c("20 Yeah High" = "20year_high",
-                                                   "20 Yeah Low" = "20year_low",
-                                                   "5 Year Median" = "5year_med",
-                                                   "2020 AQI Value" = "aqi")),
-                              textOutput("Notes.")
-                            ),
+                          #sidebarLayout(
+                          #  sidebarPanel(
+                          #    checkboxGroupInput("data_shown", h3("Select comparisons:"),
+                          #                       c("20 Yeah High" = "20year_high",
+                          #                         "20 Yeah Low" = "20year_low",
+                          #                         "5 Year Median" = "5year_med",
+                          #                         "2020 AQI Value" = "aqi")),
+                          #    textOutput("Notes.")
+                          #  ),
                             
                             mainPanel(
                                       tabsetPanel(
                                         tabPanel('AQI Info', tableOutput('AQIinfo'), width = 800),
                                         tabPanel('Austin', plotlyOutput('AustinAQI'), width = 800),
-                                        tabPanel('San Diego', plotlyOutput('SanDiegoAQI'), width = 800)
+                                        tabPanel('San Diego', plotlyOutput('SanDiegoAQI'), width = 800),
+                                        tabPanel('Before', imageOutput('previousNO2'), width = 600, height = 600),
+                                        tabPanel('After', imageOutput('currentNO2'), width = 600, height = 600)
                                       )
-                              )
-                          )      
+                            )
+                            
+                          #)      
                  ),
                  
                  # Gardening Tab
                  tabPanel("Plants",
+                          dashboardSidebar(disable = TRUE),
+                          dashboardBody(
                           fluidRow(
                             column(width = 8,
-                                   htmlOutput("frame")),
+                                   uiOutput("frame")
+                            ),
                             column(width = 4,
-
-                                   "Click on a state on the map to learn more about gardening conditions
-                                    in that area!", tags$br(), tags$br(),
-                                    "You can better the environment by growing your own food, and it is important to
-                                    your health to get some sunlight!", tags$br(), tags$br(),
-                                    "Select your zone for some planting suggestions.", tags$br(), tags$br(),
-                                   pickerInput("zone_select",
-                                               choices = c("Zone 1 - 2", "Zone 3 - 4",
-                                                           "Zone 5 - 6", "Zone 7 - 8",
-                                                           "Zone 9 - 10","Zone 11 - 13"), multiple = FALSE),
-                                   textOutput("zone_notes_1_2"), textOutput("zone_notes_3_4"), textOutput("zone_notes_5_6"),
-                                   textOutput("zone_notes_7_8"), textOutput("zone_notes_9_10"), textOutput("zone_notes_11_13")
-                                  )
+                                     "Click on a state on the map to learn more about gardening conditions
+                                      in that area!", tags$br(), tags$br(),
+                                     "You can better the environment by growing your own food, and it is important to
+                                      your health to get some sunlight!", tags$br(), tags$br(),
+                                     "Select your zone for some planting suggestions.", tags$br(), tags$br(),
+                                     pickerInput("zone_select",
+                                                 choices = c("Zone 1 - 2", "Zone 3", "Zone 4",
+                                                             "Zone 5", "Zone 6", "Zone 7", "Zone 8", "Zone 9",
+                                                             "Zone 9 - 10","Zone 11 - 13"), multiple = FALSE))),
+                          #dashboardBody(
+                            fluidRow(
+                                    valueBoxOutput("zone_notes_box", width = 8),
+                                    imageOutput("zone_notes_3_9", width = 8)
+                            )
                           )
                   ),
                  
@@ -763,24 +770,90 @@ server <- function(input, output, session) {
   })
   
   # planting notes
-  output$zone_notes_1_2 <- renderText({
-    if(input$zone_select=="Zone 1 - 2") { paste0("Note 1 - 2") }
+  output$zone_notes_box <- renderValueBox({
+    if(input$zone_select=="Zone 1 - 2"){
+      valueBox("Zones 1 - 2", "Growing season: April – September. Best plants to grow: 
+      Vine tomatores, lettucekale, broccoli, asparagus, eggplant, other vegetables with 
+               short time between planting and harves", color = "blue")
+    }
+    else if(input$zone_select=="Zone 9 - 10"){
+      valueBox("Zones 9 - 10", "Growing season: February-November. Best plants to grow: 
+      Tomatoes, melons, squash, corn, peppers, yams, citrus, peaches, figs, bananas, 
+      salad greens and sweet peas during the cooler months", color = "yellow")
+    }
+    else if(input$zone_select=="Zone 11 - 13"){
+      valueBox("Zones 11 - 13", "Growing season: Year-round. Best plants to grow: kale, 
+      okinawa spinach, pole beans, passionfruit, sweet potato, red potato, cassava, 
+      pineapple, pumpkin, mango, papaya, Thai chili peppers, citrus, bananas, taro", color = "red")
+    }
   })
-  output$zone_notes_3_4 <- renderText({
-    if(input$zone_select=="Zone 3 - 4") { paste0("Note 3 - 4") }
-  })
-  output$zone_notes_5_6 <- renderText({
-    if(input$zone_select=="Zone 5 - 6") { paste0("Note 5 -6") }
-  })
-  output$zone_notes_7_8 <- renderText({
-    if(input$zone_select=="Zone 7 - 8") { paste0("Note 7 - 8") }
-  })
-  output$zone_notes_9_10 <- renderText({
-    if(input$zone_select=="Zone 9 - 10") { paste0("Note 9 - 10") }
-  })
-  output$zone_notes_11_13 <- renderText({
-    if(input$zone_select=="Zone 11 - 13") { paste0("Note 11 - 13") }
-  })
+  #output$zone_notes_1_2 <- renderText({
+   # if(input$zone_select=="Zone 1 - 2") { 
+    #  paste0("Growing season: April – September", tags$br(),
+     #       "Best plants to grow: Vine tomatores, lettucekale, broccoli, 
+      #       asparagus, eggplant, other vegetables with short time between planting and harvest")
+    #}
+  #})
+  output$zone_notes_3_9 <- renderImage({
+    if(input$zone_select=="Zone 3") { 
+      return(list(
+        src = "data/zoneInfo/zone3.png",
+        contentType = "image/png",
+        alt = "Zone 3 guide"
+      ))
+    }
+    else if(input$zone_select=="Zone 4") { 
+      return(list(
+        src = "data/zoneInfo/zone4.png",
+        contentType = "image/png",
+        alt = "Zone 4 guide"
+      ))
+    }
+    else if(input$zone_select=="Zone 5") { 
+      return(list(
+        src = "data/zoneInfo/zone5.png",
+        contentType = "image/png",
+        alt = "Zone 5 guide"
+      ))
+    }
+    else if(input$zone_select=="Zone 6") { 
+      return(list(
+        src = "data/zoneInfo/zone6.png",
+        contentType = "image/png",
+        alt = "Zone 6 guide"
+      ))
+    }
+    else if(input$zone_select=="Zone 7") { 
+      return(list(
+        src = "data/zoneInfo/zone7.png",
+        contentType = "image/png",
+        alt = "Zone 7 guide"
+      ))
+    }
+    else if(input$zone_select=="Zone 8") { 
+      return(list(
+        src = "data/zoneInfo/zone8.png",
+        contentType = "image/png",
+        alt = "Zone 8 guide"
+      ))
+    }
+    else if(input$zone_select=="Zone 9") { 
+      return(list(
+        src = "data/zoneInfo/zone9.png",
+        contentType = "image/png",
+        alt = "Zone 9 guide"
+      ))
+    }
+  }, deleteFile = FALSE)
+  
+  #output$zone_notes_11_13 <- renderText({
+   # if(input$zone_select=="Zone 11 - 13") { 
+    #  paste0("Growing season: Year-round", tags$br(), 
+     #        "Best plants to grow: kale, okinawa spinach, pole beans, passionfruit, 
+      #       sweet potato, red potato, cassava, pineapple, pumpkin, mango, papaya, 
+      #       Thai chili peppers, citrus, bananas, taro") 
+    #}
+#  })
   
 
   #air quality plots
@@ -793,6 +866,22 @@ server <- function(input, output, session) {
     source("data/air_quality_San_Diego.R")
     aqiSanD
   })
+  
+  # NO2 images
+  output$previousNO2 <- renderImage({
+    return(list(
+      src = "data/avg2015-2019_NO2_print_w_colorbar_date_print.jpg",
+      contentType = "image/jpg",
+      alt = "map of past NO2 levels"
+    ))
+  }, deleteFile = FALSE)
+  output$currentNO2 <- renderImage({
+    return(list(
+      src = "data/2020_NO2_w_colorbar_date_print.jpg",
+      contentType = "image/jpg",
+      alt = "map of 2020 NO2 levels"
+    ))
+  }, deleteFile = FALSE)
   
   # data tab
   output$downloadCsv <- downloadHandler(
