@@ -125,7 +125,6 @@ tcol_plot = function(tcol_aggregated, yr) {
 }
 
 
-# import air quality data
 
 
 # table with Air Quality Index Explanations from https://www.epa.gov/outdoor-air-quality-data/air-data-basic-information
@@ -186,7 +185,7 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
                             mainPanel(
                               tabsetPanel(
                                 tabPanel("Traffic Volume", plotlyOutput("all_tc_plot"), width = 6),
-                                tabPanel("Traffic Collision", plotlyOutput("tcol_plot", width = 800)),
+                                tabPanel("Traffic Collision", plotlyOutput("tcol_plot"), width = 800),
                                 tabPanel("Combined")
                               )
                             )
@@ -206,8 +205,14 @@ ui <- navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
                             ),
                             
                             mainPanel(
-                              tableOutput('AQIinfo')
-                            )
+                                      tabsetPanel(
+                                        tabPanel('AQI Info', tableOutput('AQIinfo'), width = 800),
+                                        tabPanel('Austin', plotlyOutput('AustinAQI'), width = 800),
+                                        tabPanel('San Diego')
+                                      )
+                              
+                            
+                              )
                           )      
                  ),
                  
@@ -245,6 +250,12 @@ server <- function(input, output, session) {
   
   #air quality plots
   output$AQIinfo <- renderTable(infoAQI)
+  output$AustinAQI <- renderPlotly({
+    source("data/air_quality_Austin.R")
+    aqiAust
+  }
+    
+  )
 }
 
 shinyApp(ui, server)
