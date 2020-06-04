@@ -519,7 +519,7 @@ ui <- navbarPage(theme = shinytheme("sandstone"), collapsible = TRUE,
                                     ),
                                     box(
                                       title = "Why does this matter?", width = NULL, solidHeader = TRUE, status = "primary",
-                                      "If remote work was more feasible, and people no longer had to commute, pollution levels could stay at low levels and we would remove some of our carbon foot print."
+                                      "If remote work was more feasible, and more people no longer had to commute, pollution levels could stay at low levels and we would remove some of our carbon foot print. "
                                     ),
                                     box(
                                       width = NULL, background = "light-blue",
